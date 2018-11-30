@@ -7,7 +7,7 @@ CFLAGS = -Iinclude -Wall -std=c++11 -O2
 
 .PHONY: all clean
 
-all: bin/lists bin/stack bin/queue bin/dictionary
+all: bin/lists bin/stack bin/queue bin/deque bin/dictionary
 
 bin/lists: tests/lists.cpp
 	$(CC) $(CFLAGS) $^ -o $@
@@ -16,6 +16,9 @@ bin/stack: tests/stack.cpp
 	$(CC) $(CFLAGS) $^ -o $@
 
 bin/queue: tests/queue.cpp
+	$(CC) $(CFLAGS) $^ -o $@
+
+bin/deque: tests/deque.cpp
 	$(CC) $(CFLAGS) $^ -o $@
 
 bin/dictionary: tests/dictionary.cpp
