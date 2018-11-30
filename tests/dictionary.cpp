@@ -44,6 +44,10 @@ int main(int argc, char *argv[])
 
 	std::cout << ht.keys() << std::endl;
 
+	ht.resize(8);
+
+	std::cout << ht << std::endl;
+
 	return 0;
 }
 

@@ -44,6 +44,7 @@ public:
 	T get(K k) const;
 	void insert(K k, T v);
 	void remove(K k);
+	void resize(size_t d);
 
 	LinkedList<T> values() const;
 	LinkedList<K> keys() const;
@@ -251,6 +252,29 @@ void HashTable<K, T>::remove(K k)
 	delete e;
 
 	m_size--;
+}
+
+template<typename K, typename T>
+void HashTable<K, T>::resize(size_t d)
+{
+	HashTable<K, T> other(d);
+
+	for(size_t i = 0; i < m_divisor; i++)
+	{
+		HTNode<K, T> *tmp = m_table[i];
+
+		while(tmp != nullptr)
+		{
+			other.insert(tmp->key, tmp->value);
+
+			tmp = tmp->next;
+		}
+	}
+
+	clear();
+	delete [] m_table;
+
+	*this = other;
 }
 
 template<typename K, typename T>
