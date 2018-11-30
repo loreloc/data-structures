@@ -23,6 +23,7 @@ public:
 	int prev(int p) const;
 	void clear();
 	bool empty() const;
+	size_t size() const;
 	int begin() const;
 	bool end(int p) const;
 	void insert(int p, T v);
@@ -120,6 +121,12 @@ template<typename T>
 bool VectorList<T>::empty() const
 {
 	return m_size == 0;
+}
+
+template<typename T>
+size_t VectorList<T>::size() const
+{
+	return m_size;
 }
 
 template<typename T>

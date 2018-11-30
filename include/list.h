@@ -13,6 +13,7 @@ public:
 	virtual P prev(P p) const = 0;
 	virtual void clear() = 0;
 	virtual bool empty() const = 0;
+	virtual size_t size() const = 0;
 	virtual P begin() const = 0;
 	virtual bool end(P p) const = 0;
 	virtual void insert(P p, T v) = 0;
@@ -23,7 +24,6 @@ public:
 	virtual void popBack() = 0;
 	virtual void popFront() = 0;
 
-	virtual size_t size() const;
 	virtual void invert();
 };
 
@@ -44,22 +44,6 @@ std::ostream &operator<<(std::ostream &os, const List<T, P> &l)
 	os << "]";
 
 	return os;
-}
-
-template<class T, class P>
-size_t List<T, P>::size() const
-{
-	size_t size = 0;
-
-	P p = begin();
-
-	while(!end(p))
-	{
-		p = next(p);
-		size++;
-	}
-
-	return size;
 }
 
 template<class T, class P>

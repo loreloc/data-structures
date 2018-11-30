@@ -34,6 +34,7 @@ public:
 	void create();
 	void clear();
 	bool empty() const;
+	size_t size() const;
 	LNode<T> *begin() const;
 	bool end(LNode<T> *p) const;
 	void insert(LNode<T> *p, T v);
@@ -47,6 +48,7 @@ public:
 private:
 	LNode<T> *m_head;
 	LNode<T> *m_tail;
+	size_t m_size;
 };
 
 
@@ -149,6 +151,12 @@ bool LinkedList<T>::empty() const
 }
 
 template<typename T>
+size_t LinkedList<T>::size() const
+{
+	return m_size;
+}
+
+template<typename T>
 LNode<T> *LinkedList<T>::begin() const
 {
 	return m_head;
@@ -174,6 +182,8 @@ void LinkedList<T>::insert(LNode<T> *p, T v)
 		p->next->prev = node;
 
 	p->next = node;
+
+	m_size++;
 }
 
 template<typename T>
@@ -192,6 +202,8 @@ void LinkedList<T>::remove(LNode<T> *p)
 		p->next->prev = p->prev;
 
 	delete tmp;
+
+	m_size--;
 }
 
 template<typename T>
@@ -229,6 +241,8 @@ void LinkedList<T>::pushBack(T v)
 	}
 
 	m_tail = node;
+
+	m_size++;
 }
 
 template<typename T>
@@ -250,6 +264,8 @@ void LinkedList<T>::pushFront(T v)
 	}
 
 	m_head = node;
+
+	m_size++;
 }
 
 template<typename T>
@@ -270,6 +286,8 @@ void LinkedList<T>::popBack()
 		m_tail = m_tail->prev;
 		delete tmp;
 	}
+
+	m_size--;
 }
 
 template<typename T>
@@ -281,6 +299,8 @@ void LinkedList<T>::popFront()
 	LNode<T> *tmp = m_head;
 	m_head = m_head->next;
 	delete tmp;
+
+	m_size--;
 }
 
 
