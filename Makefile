@@ -5,9 +5,9 @@ CC = g++
 # compile flags
 CFLAGS = -Iinclude -Wall -std=c++11 -O2
 
-.PHONY: all clean bin/lists bin/stack bin/queue bin/deque bin/dictionary bin/binarytree
+.PHONY: all clean bin/lists bin/stack bin/queue bin/deque bin/dictionary bin/binarytree bin/heap
 
-all: bin/lists bin/stack bin/queue bin/deque bin/dictionary bin/binarytree
+all: bin/lists bin/stack bin/queue bin/deque bin/dictionary bin/binarytree bin/heap
 
 bin/lists: tests/lists.cpp
 	$(CC) $(CFLAGS) $^ -o $@
@@ -25,6 +25,9 @@ bin/dictionary: tests/dictionary.cpp
 	$(CC) $(CFLAGS) $^ -o $@
 
 bin/binarytree: tests/binarytree.cpp
+	$(CC) $(CFLAGS) $^ -o $@
+
+bin/heap: tests/heap.cpp
 	$(CC) $(CFLAGS) $^ -o $@
 
 clean:
