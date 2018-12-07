@@ -16,10 +16,14 @@ class BinaryTree
 {
 public:
 	BinaryTree();
+	BinaryTree(const BinaryTree &t);
 	~BinaryTree();
+
+	BinaryTree &operator=(const BinaryTree &t);
 
 	bool empty() const;
 	size_t size() const;
+	void clear();
 	BTNode<T>* root() const;
 	BTNode<T>* insertRoot(T v);
 	BTNode<T>* insertLeft(BTNode<T> *p, T v);
@@ -36,6 +40,7 @@ private:
 	BTNode<T> *m_root;
 	size_t m_size;
 
+	static BTNode<T> *_copy(BTNode<T> *p, BinaryTree<T> &t);
 	static void _remove(BTNode<T> *p, BinaryTree<T> &t);
 	static void _print(std::ostream &os, BTNode<T> *p);
 };
@@ -49,9 +54,30 @@ BinaryTree<T>::BinaryTree() :
 }
 
 template<typename T>
+BinaryTree<T>::BinaryTree(const BinaryTree<T> &t)
+{
+	m_size = 0;
+	m_root = _copy(t.root(), *this);
+}
+
+template<typename T>
 BinaryTree<T>::~BinaryTree()
 {
 	_remove(m_root, *this);
+}
+
+template<typename T>
+BinaryTree<T>& BinaryTree<T>::operator=(const BinaryTree<T> &t)
+{
+	if(this == &t)
+		return *this;
+
+	if(!empty())
+		clear();
+
+	m_root = _copy(t.root(), *this);
+
+	return *this;
 }
 
 template<typename T>
@@ -64,6 +90,12 @@ template<typename T>
 size_t BinaryTree<T>::size() const
 {
 	return m_size;
+}
+
+template<typename T>
+void BinaryTree<T>::clear()
+{
+	_remove(m_root, *this);
 }
 
 template<typename T>
@@ -148,6 +180,21 @@ std::ostream &operator<<(std::ostream &os, const BinaryTree<T> &t)
 {
 	BinaryTree<T>::print(os, t.root());
 	return os;
+}
+
+template<typename T>
+BTNode<T> *BinaryTree<T>::_copy(BTNode<T> *p, BinaryTree<T> &t)
+{
+	if(p == nullptr)
+		return nullptr;
+
+	BTNode<T> *node = new BTNode<T>;
+	node->value = p->value;
+	node->left = _copy(p->left, t);
+	node->right = _copy(p->right, t);
+	t.m_size++;
+
+	return node;
 }
 
 template<typename T>
