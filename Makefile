@@ -16,6 +16,7 @@ TARGETS = lists         \
           deque         \
           dictionary    \
           binarytree    \
+          tree          \
           priorityqueue \
 
 # source files
