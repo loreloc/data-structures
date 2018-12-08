@@ -98,6 +98,7 @@ template<typename T>
 void BinaryTree<T>::clear()
 {
 	_remove(m_root);
+	m_root = nullptr;
 }
 
 template<typename T>
