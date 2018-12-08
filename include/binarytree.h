@@ -193,7 +193,7 @@ std::ostream &operator<<(std::ostream &os, const BinaryTree<T> &t)
 template<typename T>
 BTNode<T> *BinaryTree<T>::_copy(BTNode<T> *n, BTNode<T> *p)
 {
-	if(p == nullptr)
+	if(n == nullptr)
 		return nullptr;
 
 	BTNode<T> *node = new BTNode<T>;
