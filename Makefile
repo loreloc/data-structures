@@ -5,31 +5,32 @@ CC = g++
 # compile flags
 CFLAGS = -Iinclude -Wall -std=c++11 -O2
 
-.PHONY: all clean bin/lists bin/stack bin/queue bin/deque bin/dictionary bin/binarytree bin/priorityqueue
+# directories
+SDIR = tests
+BDIR = bin
 
-all: bin/lists bin/stack bin/queue bin/deque bin/dictionary bin/binarytree bin/priorityqueue
+# targets
+TARGETS = lists         \
+          stack         \
+          queue         \
+          deque         \
+          dictionary    \
+          binarytree    \
+          priorityqueue \
 
-bin/lists: tests/lists.cpp
-	$(CC) $(CFLAGS) $^ -o $@
+# source files
+SRC = $(patsubst %, $(SDIR)/%.cpp, $(TARGETS))
 
-bin/stack: tests/stack.cpp
-	$(CC) $(CFLAGS) $^ -o $@
+# executable files
+BIN = $(patsubst %, $(BDIR)/%, $(TARGETS))
 
-bin/queue: tests/queue.cpp
-	$(CC) $(CFLAGS) $^ -o $@
+.PHONY: all clean
 
-bin/deque: tests/deque.cpp
-	$(CC) $(CFLAGS) $^ -o $@
+all: $(BIN)
 
-bin/dictionary: tests/dictionary.cpp
-	$(CC) $(CFLAGS) $^ -o $@
-
-bin/binarytree: tests/binarytree.cpp
-	$(CC) $(CFLAGS) $^ -o $@
-
-bin/priorityqueue: tests/priorityqueue.cpp
-	$(CC) $(CFLAGS) $^ -o $@
+$(BDIR)/%: $(SDIR)/%.cpp
+	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -rf bin/*
+	rm -rf $(BDIR)/*
 
