@@ -9,6 +9,7 @@ struct BTNode
 	T value;
 	BTNode<T> *left;
 	BTNode<T> *right;
+	BTNode<T> *parent;
 };
 
 template<class T>
@@ -26,12 +27,12 @@ public:
 	void clear();
 	BTNode<T>* root() const;
 	BTNode<T>* insertRoot(T v);
-	BTNode<T>* insertLeft(BTNode<T> *p, T v);
-	BTNode<T>* insertRight(BTNode<T> *p, T v);
-	void removeLeft(BTNode<T> *p);
-	void removeRight(BTNode<T> *p);
+	BTNode<T>* insertLeft(BTNode<T> *n, T v);
+	BTNode<T>* insertRight(BTNode<T> *n, T v);
+	void removeLeft(BTNode<T> *n);
+	void removeRight(BTNode<T> *n);
 
-	static void print(std::ostream &os, BTNode<T> *p);
+	static void print(std::ostream &os, BTNode<T> *n);
 
 	template<class U>
 	friend std::ostream &operator<<(std::ostream &os, const BinaryTree<T> &t);
@@ -40,9 +41,10 @@ private:
 	BTNode<T> *m_root;
 	size_t m_size;
 
-	static BTNode<T> *_copy(BTNode<T> *p, BinaryTree<T> &t);
-	static void _remove(BTNode<T> *p, BinaryTree<T> &t);
-	static void _print(std::ostream &os, BTNode<T> *p);
+	BTNode<T> *_copy(BTNode<T> *n, BTNode<T> *p);
+	void _remove(BTNode<T> *n);
+
+	static void _print(std::ostream &os, BTNode<T> *n);
 };
 
 template<typename T>
@@ -57,13 +59,13 @@ template<typename T>
 BinaryTree<T>::BinaryTree(const BinaryTree<T> &t)
 {
 	m_size = 0;
-	m_root = _copy(t.root(), *this);
+	m_root = _copy(t.root(), nullptr);
 }
 
 template<typename T>
 BinaryTree<T>::~BinaryTree()
 {
-	_remove(m_root, *this);
+	_remove(m_root);
 }
 
 template<typename T>
@@ -75,7 +77,7 @@ BinaryTree<T>& BinaryTree<T>::operator=(const BinaryTree<T> &t)
 	if(!empty())
 		clear();
 
-	m_root = _copy(t.root(), *this);
+	m_root = _copy(t.root(), nullptr);
 
 	return *this;
 }
@@ -95,7 +97,7 @@ size_t BinaryTree<T>::size() const
 template<typename T>
 void BinaryTree<T>::clear()
 {
-	_remove(m_root, *this);
+	_remove(m_root);
 }
 
 template<typename T>
@@ -114,22 +116,24 @@ BTNode<T>* BinaryTree<T>::insertRoot(T v)
 	m_root->value = v;
 	m_root->left = nullptr;
 	m_root->right = nullptr;
+	m_root->parent = nullptr;
 
 	return m_root;
 }
 
 template<typename T>
-BTNode<T>* BinaryTree<T>::insertLeft(BTNode<T> *p, T v)
+BTNode<T>* BinaryTree<T>::insertLeft(BTNode<T> *n, T v)
 {
-	if(p->left != nullptr)
+	if(n->left != nullptr)
 		throw "node has already a left sub-tree";
 
 	BTNode<T> *node = new BTNode<T>;
 	node->value = v;
 	node->left = nullptr;
 	node->right = nullptr;
+	node->parent = n;
 
-	p->left = node;
+	n->left = node;
 
 	m_size++;
 
@@ -137,17 +141,18 @@ BTNode<T>* BinaryTree<T>::insertLeft(BTNode<T> *p, T v)
 }
 
 template<typename T>
-BTNode<T>* BinaryTree<T>::insertRight(BTNode<T> *p, T v)
+BTNode<T>* BinaryTree<T>::insertRight(BTNode<T> *n, T v)
 {
-	if(p->right != nullptr)
+	if(n->right != nullptr)
 		throw "node has already a right sub-tree";
 
 	BTNode<T> *node = new BTNode<T>;
 	node->value = v;
 	node->left = nullptr;
 	node->right = nullptr;
+	node->parent = n;
 
-	p->right = node;
+	n->right = node;
 
 	m_size++;
 
@@ -155,24 +160,26 @@ BTNode<T>* BinaryTree<T>::insertRight(BTNode<T> *p, T v)
 }
 
 template<typename T>
-void BinaryTree<T>::removeLeft(BTNode<T> *p)
+void BinaryTree<T>::removeLeft(BTNode<T> *n)
 {
-	_remove(p->left, *this);
+	_remove(n->left);
+	n->left = nullptr;
 }
 
 template<typename T>
-void BinaryTree<T>::removeRight(BTNode<T> *p)
+void BinaryTree<T>::removeRight(BTNode<T> *n)
 {
-	_remove(p->right, *this);
+	_remove(n->right);
+	n->right = nullptr;
 }
 
 template<typename T>
-void BinaryTree<T>::print(std::ostream &os, BTNode<T> *p)
+void BinaryTree<T>::print(std::ostream &os, BTNode<T> *n)
 {
-	if(p == nullptr)
+	if(n == nullptr)
 		os << "[ ]";
 	else
-		_print(os, p);
+		_print(os, n);
 }
 
 template<typename T>
@@ -183,46 +190,47 @@ std::ostream &operator<<(std::ostream &os, const BinaryTree<T> &t)
 }
 
 template<typename T>
-BTNode<T> *BinaryTree<T>::_copy(BTNode<T> *p, BinaryTree<T> &t)
+BTNode<T> *BinaryTree<T>::_copy(BTNode<T> *n, BTNode<T> *p)
 {
 	if(p == nullptr)
 		return nullptr;
 
 	BTNode<T> *node = new BTNode<T>;
-	node->value = p->value;
-	node->left = _copy(p->left, t);
-	node->right = _copy(p->right, t);
-	t.m_size++;
+	node->value = n->value;
+	node->parent = p;
+	node->left = _copy(n->left, node);
+	node->right = _copy(n->right, node);
+	m_size++;
 
 	return node;
 }
 
 template<typename T>
-void BinaryTree<T>::_remove(BTNode<T> *p, BinaryTree<T> &t)
+void BinaryTree<T>::_remove(BTNode<T> *n)
 {
-	if(p != nullptr)
+	if(n != nullptr)
 	{
-		_remove(p->left, t);
-		_remove(p->right, t);
+		_remove(n->left);
+		_remove(n->right);
 
-		delete p;
+		delete n;
 
-		t.m_size--;
+		m_size--;
 	}
 }
 
 template<typename T>
-void BinaryTree<T>::_print(std::ostream &os, BTNode<T> *p)
+void BinaryTree<T>::_print(std::ostream &os, BTNode<T> *n)
 {
-	std::cout << "[ " << p->value << " - ";
+	std::cout << "[ " << n->value << " - ";
 
-	if(p->left)
-		_print(os, p->left);
+	if(n->left)
+		_print(os, n->left);
 	else
 		os << "NULL ";
 
-	if(p->right)
-		_print(os, p->right);
+	if(n->right)
+		_print(os, n->right);
 	else
 		os << "NULL ";
 
