@@ -223,7 +223,7 @@ void BinaryTree<T>::_remove(BTNode<T> *n)
 template<typename T>
 void BinaryTree<T>::_print(std::ostream &os, BTNode<T> *n)
 {
-	std::cout << "[ " << n->value << " - ";
+	std::cout << "[ " << n->value << " ";
 
 	if(n->left)
 		_print(os, n->left);
