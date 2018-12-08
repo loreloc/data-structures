@@ -5,19 +5,19 @@
 #include <cstring>
 
 template<class T>
-class Heap
+class PriorityQueue
 {
 public:
-	Heap();
-	Heap(const Heap &h);
-	~Heap();
+	PriorityQueue();
+	PriorityQueue(const PriorityQueue &h);
+	~PriorityQueue();
 
-	Heap &operator=(const Heap &h);
+	PriorityQueue &operator=(const PriorityQueue &h);
 
 	bool empty() const;
 	size_t size() const;
 	void clear();
-	void insert(T v);
+	void push(T v);
 	void pop();
 	T min() const;
 	T& min();
@@ -25,7 +25,7 @@ public:
 private:
 	size_t m_size;
 	size_t m_capacity;
-	T *m_data;
+	T *m_heap;
 
 	void _changeSize(size_t s);
 	void _fixUp();
@@ -33,115 +33,115 @@ private:
 };
 
 template<typename T>
-Heap<T>::Heap() :
+PriorityQueue<T>::PriorityQueue() :
 	m_size(0),
 	m_capacity(10)
 {
-	m_data = new T[m_capacity];
+	m_heap = new T[m_capacity];
 }
 
 template<typename T>
-Heap<T>::Heap(const Heap<T> &h)
+PriorityQueue<T>::PriorityQueue(const PriorityQueue<T> &h)
 {
 	m_size = h.m_size;
 	m_capacity = h.m_capacity;
-	m_data = new T[m_capacity]; 
+	m_heap = new T[m_capacity]; 
 }
 
 template<typename T>
-Heap<T>::~Heap()
+PriorityQueue<T>::~PriorityQueue()
 {
-	delete [] m_data;
+	delete [] m_heap;
 }
 
 template<typename T>
-bool Heap<T>::empty() const
+bool PriorityQueue<T>::empty() const
 {
 	return m_size == 0;
 }
 
 template<typename T>
-size_t Heap<T>::size() const
+size_t PriorityQueue<T>::size() const
 {
 	return m_size;
 }
 
 template<typename T>
-void Heap<T>::clear()
+void PriorityQueue<T>::clear()
 {
 	m_size = 0;
 }
 
 template<typename T>
-void Heap<T>::insert(T v)
+void PriorityQueue<T>::push(T v)
 {
 	if(m_size == m_capacity)
 		_changeSize(m_capacity * 2);
 
-	m_data[m_size++] = v;
+	m_heap[m_size++] = v;
 
 	_fixUp();
 }
 
 template<typename T>
-void Heap<T>::pop()
+void PriorityQueue<T>::pop()
 {
 	if(empty())
 		throw "heap is empty";
 
-	m_data[0] = m_data[--m_size];
+	m_heap[0] = m_heap[--m_size];
 
 	_fixDown();
 }
 
 template<typename T>
-T Heap<T>::min() const
+T PriorityQueue<T>::min() const
 {
 	if(empty())
 		throw "heap is empty";
 
-	return m_data[0];
+	return m_heap[0];
 }
 
 template<typename T>
-T& Heap<T>::min()
+T& PriorityQueue<T>::min()
 {
 	if(empty())
 		throw "heap is empty";
 
-	return m_data[0];
+	return m_heap[0];
 }
 
 template<typename T>
-void Heap<T>::_changeSize(size_t s)
+void PriorityQueue<T>::_changeSize(size_t s)
 {
 	T *data = new T[s];
 
-	memcpy(data, m_data, sizeof(T) * m_size);
+	memcpy(data, m_heap, sizeof(T) * m_size);
 
-	T *tmp = m_data;
-	m_data = data;
+	T *tmp = m_heap;
+	m_heap = data;
 	delete [] tmp;
 
 	m_capacity = s;
 }
 
 template<typename T>
-void Heap<T>::_fixUp()
+void PriorityQueue<T>::_fixUp()
 {
 	size_t i = m_size - 1;
 
-	while(i != 0 && m_data[i] < m_data[i / 2])
+	while(i != 0 && m_heap[i] < m_heap[i / 2])
 	{
-		T tmp = m_data[i];
-		m_data[i] = m_data[i / 2];
-		m_data[i / 2] = tmp;
+		T tmp = m_heap[i];
+		m_heap[i] = m_heap[i / 2];
+		m_heap[i / 2] = tmp;
 		i /= 2;
 	}
 }
 
 template<typename T>
-void Heap<T>::_fixDown()
+void PriorityQueue<T>::_fixDown()
 {
 	size_t i = 0;
 
@@ -149,14 +149,14 @@ void Heap<T>::_fixDown()
 	{
 		size_t j = 2 * i;
 
-		if(j < m_size && m_data[j] > m_data[j + 1])
+		if(j < m_size && m_heap[j] > m_heap[j + 1])
 			j++;
 
-		if(m_data[j] < m_data[i])
+		if(m_heap[j] < m_heap[i])
 		{
-			T tmp = m_data[i];
-			m_data[i] = m_data[j];
-			m_data[j] = tmp;
+			T tmp = m_heap[i];
+			m_heap[i] = m_heap[j];
+			m_heap[j] = tmp;
 			i = j;
 		}
 		else
