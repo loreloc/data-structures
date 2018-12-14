@@ -18,6 +18,7 @@ TARGETS = lists         \
           binarytree    \
           tree          \
           priorityqueue \
+          graph         \
 
 # source files
 SRC = $(patsubst %, $(SDIR)/%.cpp, $(TARGETS))
