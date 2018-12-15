@@ -57,7 +57,8 @@ VectorList<T>::VectorList(const VectorList<T> &l)
 	m_capacity = l.m_capacity;
 	m_size = l.m_size;
 
-	memcpy(m_elements, l.m_elements, sizeof(T) * m_size);
+	for(int i = 0; i < m_size; i++)
+		m_elements[i] = l.m_elements[i];
 }
 
 template<typename T>
@@ -78,7 +79,8 @@ VectorList<T> &VectorList<T>::operator=(const VectorList<T> &l)
 	m_capacity = l.m_capacity;
 	m_size = l.m_size;
 
-	memcpy(m_elements, l.m_elements, sizeof(T) * m_size);
+	for(int i = 0; i < m_size; i++)
+		m_elements[i] = l.m_elements[i];
 }
 
 template<typename T>
@@ -233,7 +235,8 @@ void VectorList<T>::_changeSize(int s)
 {
 	T *elements = new T[s];
 
-	memcpy(elements, m_elements, sizeof(T) * m_size);
+	for(int i = 0; i < m_size; i++)
+		elements[i] = m_elements[i];
 
 	T *tmp = m_elements;
 	m_elements = elements;
