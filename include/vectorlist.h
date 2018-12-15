@@ -214,16 +214,18 @@ void VectorList<T>::pushFront(T v)
 template<typename T>
 void VectorList<T>::popBack()
 {
-	m_size--;
+	if (m_size!=0)
+	  m_size--;
 }
 
 template<typename T>
 void VectorList<T>::popFront()
 {
-	for(int i = 0; i < m_size - 1; i++)
-		m_elements[i] = m_elements[i + 1];
-
-	m_size--;
+	if (m_size!=0){
+		for(int i = 0; i < m_size - 1; i++)
+		  m_elements[i] = m_elements[i + 1];
+		m_size--;
+	}
 }
 
 template<typename T>
