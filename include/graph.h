@@ -4,6 +4,8 @@
 #include <iostream>
 #include <cstring>
 
+#include "linkedlist.h"
+
 template<class T, class W>
 class Graph;
 
@@ -57,6 +59,9 @@ public:
 	void removeEdge(GNode<T, W> *a, GNode<T, W> *b);
 
 	GEdge<T, W>* edgeBetween(GNode<T, W> *a, GNode<T, W> *b);
+
+	LinkedList<GNode<T, W> *> getNodes() const;
+	LinkedList<GEdge<T, W> *> getEdges() const;
 
 	Graph &operator=(const Graph &g);
 
@@ -256,5 +261,31 @@ GEdge<T, W>* Graph<T, W>::edgeBetween(GNode<T, W> *a, GNode<T, W> *b)
 		return &m_matrix[a->id].edges[b->id];
 
 	return nullptr;
+}
+
+template<typename T, typename W>
+LinkedList<GNode<T, W> *> Graph<T, W>::getNodes() const
+{
+	LinkedList<GNode<T, W> *> l;
+
+	for(size_t i = 0; i < m_size; i++)
+		if(m_matrix[i].valid)
+			l.pushBack(&m_matrix[i]);
+
+	return l;
+}
+
+template<typename T, typename W>
+LinkedList<GEdge<T, W> *> Graph<T, W>::getEdges() const
+{
+	LinkedList<GEdge<T, W> *> l;
+
+	for(size_t i = 0; i < m_size; i++)
+		if(m_matrix[i].valid)
+			for(size_t j = 0; j < m_size; j++)
+				if(m_matrix[i].edges[j].valid)
+					l.pushBack(&m_matrix[i].edges[j]);
+
+	return l;
 }
 
