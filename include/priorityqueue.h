@@ -45,7 +45,10 @@ PriorityQueue<T>::PriorityQueue(const PriorityQueue<T> &q)
 {
 	m_size = q.m_size;
 	m_capacity = q.m_capacity;
-	m_heap = new T[m_capacity]; 
+	m_heap = new T[m_capacity];
+
+	for(size_t i = 0; i < m_size; i++)
+		m_heap[i] = q.m_heap[i];
 }
 
 template<typename T>
