@@ -75,6 +75,7 @@ VectorList<T> &VectorList<T>::operator=(const VectorList<T> &l)
 
 	clear();
 
+	delete [] m_elements;
 	m_elements = new T[l.m_capacity];
 	m_capacity = l.m_capacity;
 	m_size = l.m_size;
