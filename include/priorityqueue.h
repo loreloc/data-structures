@@ -9,10 +9,10 @@ class PriorityQueue
 {
 public:
 	PriorityQueue();
-	PriorityQueue(const PriorityQueue &h);
+	PriorityQueue(const PriorityQueue &q);
 	~PriorityQueue();
 
-	PriorityQueue &operator=(const PriorityQueue &h);
+	PriorityQueue &operator=(const PriorityQueue &q);
 
 	bool empty() const;
 	size_t size() const;
@@ -41,10 +41,10 @@ PriorityQueue<T>::PriorityQueue() :
 }
 
 template<typename T>
-PriorityQueue<T>::PriorityQueue(const PriorityQueue<T> &h)
+PriorityQueue<T>::PriorityQueue(const PriorityQueue<T> &q)
 {
-	m_size = h.m_size;
-	m_capacity = h.m_capacity;
+	m_size = q.m_size;
+	m_capacity = q.m_capacity;
 	m_heap = new T[m_capacity]; 
 }
 
@@ -52,6 +52,25 @@ template<typename T>
 PriorityQueue<T>::~PriorityQueue()
 {
 	delete [] m_heap;
+}
+
+template<typename T>
+PriorityQueue<T>& PriorityQueue<T>::operator=(const PriorityQueue<T> &q)
+{
+	if(this == &q)
+		return *this;
+
+	clear();
+
+	delete [] m_heap;
+	m_heap = new T[q.m_capacity];
+	m_capacity = q.m_capacity;
+	m_size = q.m_size;
+
+	for(size_t i = 0; i < m_size; i++)
+		m_heap[i] = q.m_heap[i];
+
+	return *this;
 }
 
 template<typename T>
