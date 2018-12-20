@@ -32,6 +32,7 @@ public:
 	STNode<T>* next(STNode<T> *n) const;
 	STNode<T>* prev(STNode<T> *n) const;
 	STNode<T>* insert(T v);
+	void remove(STNode<T> *n);
 
 	static void print(std::ostream &os, STNode<T> *n);
 
@@ -44,6 +45,7 @@ private:
 
 	STNode<T>* _min(STNode<T> *n) const;
 	STNode<T>* _max(STNode<T> *n) const;
+	void _transplant(STNode<T> *u, STNode<T> *v);
 	STNode<T> *_copy(STNode<T> *n, STNode<T> *p);
 	void _remove(STNode<T> *n);
 
@@ -214,6 +216,30 @@ STNode<T>* SearchTree<T>::insert(T v)
 }
 
 template<typename T>
+void SearchTree<T>::remove(STNode<T> *n)
+{
+	if(n->left == nullptr)
+		_transplant(n, n->right);
+	else if(n->right == nullptr)
+		_transplant(n, n->left);
+	else
+	{
+		STNode<T> *m = _min(n->right);
+
+		if(m->parent != n)
+		{
+			_transplant(m, m->right);
+			m->right = n->right;
+			m->right->parent = m;
+		}
+
+		_transplant(n, m);
+		m->left = n->left;
+		m->left->parent = m;
+	}
+}
+
+template<typename T>
 void SearchTree<T>::print(std::ostream &os, STNode<T> *n)
 {
 	if(n == nullptr)
@@ -245,6 +271,20 @@ STNode<T>* SearchTree<T>::_max(STNode<T> *n) const
 		n = n->right;
 
 	return n;
+}
+
+template<typename T>
+void SearchTree<T>::_transplant(STNode<T> *u, STNode<T> *v)
+{
+	if(u->parent == nullptr)
+		m_root = v;
+	else if(u == u->parent->left)
+		u->parent->left = v;
+	else
+		u->parent->right = v;
+
+	if(v != nullptr)
+		v->parent = u->parent;
 }
 
 template<typename T>
