@@ -65,8 +65,9 @@ public:
 	LinkedList<GNode<T, W> *> getNodes() const;
 	LinkedList<GEdge<T, W> *> getEdges() const;
 
-	size_t inDegree(GNode<T, W> *n);
-	size_t outDegree(GNode<T, W> *n);
+	size_t inDegree(GNode<T, W> *n) const;
+	size_t outDegree(GNode<T, W> *n) const;
+	double meanOutDegree() const;
 
 private:
 	size_t m_size;
@@ -293,7 +294,7 @@ LinkedList<GEdge<T, W> *> Graph<T, W>::getEdges() const
 }
 
 template<typename T, typename W>
-size_t Graph<T, W>::inDegree(GNode<T, W> *n)
+size_t Graph<T, W>::inDegree(GNode<T, W> *n) const
 {
 	size_t count = 0;
 
@@ -305,7 +306,7 @@ size_t Graph<T, W>::inDegree(GNode<T, W> *n)
 }
 
 template<typename T, typename W>
-size_t Graph<T, W>::outDegree(GNode<T, W> *n)
+size_t Graph<T, W>::outDegree(GNode<T, W> *n) const
 {
 	size_t count = 0;
 
@@ -314,5 +315,20 @@ size_t Graph<T, W>::outDegree(GNode<T, W> *n)
 			count++;
 
 	return count;
+}
+
+template<typename T, typename W>
+double Graph<T, W>::meanOutDegree() const
+{
+	size_t sum_out_degree = 0;
+	size_t nodes_cnt = nodes();
+
+	for(size_t i = 0; i < m_size; i++)
+		if(m_matrix[i].valid)
+			for(size_t j = 0; j < m_size; j++)
+				if(m_matrix[i].edges[j].valid)
+					sum_out_degree++;
+
+	return static_cast<double>(sum_out_degree) / nodes_cnt;
 }
 
