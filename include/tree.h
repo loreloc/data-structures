@@ -40,6 +40,7 @@ public:
 	TNode<T>* insertRoot(T v);
 
 	size_t depth() const;
+	size_t width() const;
 
 	static void print(std::ostream &os, TNode<T> *n);
 
@@ -53,6 +54,7 @@ private:
 	TNode<T> *_copy(TNode<T> *n, TNode<T> *p);
 	void _remove(TNode<T> *n);
 	size_t _depth(TNode<T> *n, size_t d) const;
+	size_t _width(TNode<T> *n, size_t w) const;
 
 	static void _print(std::ostream &os, TNode<T> *n);
 };
@@ -178,6 +180,15 @@ size_t Tree<T>::depth() const
 }
 
 template<typename T>
+size_t Tree<T>::width() const
+{
+	if(empty())
+		return 0;
+
+	return _width(root(), 1);
+}
+
+template<typename T>
 void Tree<T>::print(std::ostream &os, TNode<T> *n)
 {
 	if(n == nullptr)
@@ -257,6 +268,27 @@ size_t Tree<T>::_depth(TNode<T> *n, size_t d) const
 	}
 
 	return depth + 1;
+}
+
+template<typename T>
+size_t Tree<T>::_width(TNode<T> *n, size_t w) const
+{
+	size_t width = w;
+
+	const LinkedList<TNode<T> *> &ch = childs(n);
+
+	LNode<TNode<T> *> *tmp = ch.begin();
+	while(!ch.end(tmp))
+	{
+		size_t k = _width(ch.read(tmp), ch.size());
+
+		if(k > width)
+			width = k;
+
+		tmp = ch.next(tmp);
+	}
+
+	return width;
 }
 
 template<typename T>

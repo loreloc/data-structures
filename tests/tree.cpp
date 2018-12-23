@@ -18,10 +18,15 @@ int main(int argc, char *argv[])
 	p = tree.addChild(p, 8);
 	p = tree.addChild(p, 7);
 	tree.addChild(p, 6);
+	tree.addChild(p, 1);
+	tree.addChild(p, 2);
+	tree.addChild(p, 3);
 
 	std::cout << tree << std::endl;
 
 	std::cout << tree.depth() << std::endl;
+
+	std::cout << tree.width() << std::endl;
 
 	return 0;
 }
