@@ -43,6 +43,8 @@ public:
 	Graph(const Graph &g);
 	~Graph();
 
+	Graph &operator=(const Graph &g);
+
 	W getWeight(GEdge<T, W> *e) const;
 	T getValue(GNode<T, W> *n) const;
 	void setWeight(GEdge<T, W> *e, W w);
@@ -63,7 +65,8 @@ public:
 	LinkedList<GNode<T, W> *> getNodes() const;
 	LinkedList<GEdge<T, W> *> getEdges() const;
 
-	Graph &operator=(const Graph &g);
+	size_t inDegree(GNode<T, W> *n);
+	size_t outDegree(GNode<T, W> *n);
 
 private:
 	size_t m_size;
@@ -287,5 +290,29 @@ LinkedList<GEdge<T, W> *> Graph<T, W>::getEdges() const
 					l.pushBack(&m_matrix[i].edges[j]);
 
 	return l;
+}
+
+template<typename T, typename W>
+size_t Graph<T, W>::inDegree(GNode<T, W> *n)
+{
+	size_t count = 0;
+
+	for(size_t i = 0; i < m_size; i++)
+		if(m_matrix[i].edges[n->id].valid)
+			count++;
+
+	return count;
+}
+
+template<typename T, typename W>
+size_t Graph<T, W>::outDegree(GNode<T, W> *n)
+{
+	size_t count = 0;
+
+	for(size_t i = 0; i < m_size; i++)
+		if(m_matrix[n->id].edge[i].valid)
+			count++;
+
+	return count;
 }
 
