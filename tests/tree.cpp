@@ -14,9 +14,14 @@ int main(int argc, char *argv[])
 	p = tree.addChild(p, 8);
 	tree.addChild(p, 3);
 	tree.addChild(p, 6);
-	tree.addChild(p, 9);
+	p = tree.addChild(p, 9);
+	p = tree.addChild(p, 8);
+	p = tree.addChild(p, 7);
+	tree.addChild(p, 6);
 
 	std::cout << tree << std::endl;
+
+	std::cout << tree.depth() << std::endl;
 
 	return 0;
 }
