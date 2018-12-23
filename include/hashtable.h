@@ -42,6 +42,7 @@ public:
 	bool empty() const;
 	void clear();
 	T get(K k) const;
+	bool contains(K k) const;
 	void insert(K k, T v);
 	void remove(K k);
 	void resize(size_t d);
@@ -201,6 +202,16 @@ T HashTable<K, T>::get(K k) const
 		throw "element not found";
 
 	return e->value;
+}
+
+template<typename K, typename T>
+bool HashTable<K, T>::contains(K k) const
+{
+	size_t h = m_hash(k) % m_divisor;
+
+	HTNode<K, T> *e = _search(k, h);
+
+	return e != nullptr;
 }
 
 template<typename K, typename T>
