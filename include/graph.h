@@ -5,6 +5,8 @@
 #include <cstring>
 
 #include "linkedlist.h"
+#include "hashtable.h"
+#include "queue.h"
 
 template<class T, class W>
 class Graph;
@@ -36,6 +38,16 @@ private:
 };
 
 template<class T, class W>
+class Hash<GNode<T, W> *>
+{
+public:
+	size_t operator()(GNode<T, W> *n) const
+	{
+		return (size_t)n;
+	}
+};
+
+template<class T, class W>
 class Graph
 {
 public:
@@ -60,7 +72,8 @@ public:
 	void removeNode(GNode<T, W> *n);
 	void removeEdge(GNode<T, W> *a, GNode<T, W> *b);
 
-	GEdge<T, W>* edgeBetween(GNode<T, W> *a, GNode<T, W> *b);
+	GEdge<T, W>* edgeBetween(GNode<T, W> *a, GNode<T, W> *b) const;
+	LinkedList<GNode<T, W> *> getAdjacents(GNode<T, W> *n) const;
 
 	LinkedList<GNode<T, W> *> getNodes() const;
 	LinkedList<GEdge<T, W> *> getEdges() const;
@@ -68,6 +81,7 @@ public:
 	size_t inDegree(GNode<T, W> *n) const;
 	size_t outDegree(GNode<T, W> *n) const;
 	double meanOutDegree() const;
+	bool existsPath(GNode<T, W> *a, GNode<T, W> *b) const;
 
 private:
 	size_t m_size;
@@ -259,12 +273,24 @@ void Graph<T, W>::removeEdge(GNode<T, W> *a, GNode<T, W> *b)
 }
 
 template<typename T, typename W>
-GEdge<T, W>* Graph<T, W>::edgeBetween(GNode<T, W> *a, GNode<T, W> *b)
+GEdge<T, W>* Graph<T, W>::edgeBetween(GNode<T, W> *a, GNode<T, W> *b) const
 {
 	if(m_matrix[a->id].edges[b->id].valid)
 		return &m_matrix[a->id].edges[b->id];
 
 	return nullptr;
+}
+
+template<typename T, typename W>
+LinkedList<GNode<T, W> *> Graph<T, W>::getAdjacents(GNode<T, W> *n) const
+{
+	LinkedList<GNode<T, W> *> adj;
+
+	for(size_t i = 0; i < m_size; i++)
+		if(m_matrix[n->id].edges[i].valid)
+			adj.pushBack(&m_matrix[i]);
+
+	return adj;
 }
 
 template<typename T, typename W>
@@ -330,5 +356,44 @@ double Graph<T, W>::meanOutDegree() const
 					sum_out_degree++;
 
 	return static_cast<double>(sum_out_degree) / nodes_cnt;
+}
+
+template<typename T, typename W>
+bool Graph<T, W>::existsPath(GNode<T, W> *a, GNode<T, W> *b) const
+{
+	if(a == b)
+		return true;
+
+	Queue<GNode<T, W> *> queue;
+	HashTable<GNode<T, W> *, bool> visited(m_size);
+
+	visited.insert(a, true);
+	queue.push(a);
+
+	while(!queue.empty())
+	{
+		GNode<T, W> *s = queue.pop();
+		LinkedList<GNode<T, W> *> adj = getAdjacents(s);
+
+		LNode<GNode<T, W> *> *tmp = adj.begin();
+
+		while(!adj.end(tmp))
+		{
+			GNode<T, W> *n = adj.read(tmp);
+
+			if(b == n)
+				return true;
+
+			if(!visited.contains(n))
+			{
+				visited.insert(n, true);
+				queue.push(n);
+			}
+
+			tmp = adj.next(tmp);
+		}
+	}
+
+	return false;
 }
 

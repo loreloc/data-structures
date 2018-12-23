@@ -16,6 +16,8 @@ int main(int argc, char *argv[])
 	GEdge<char, int> *e4 = graph.insertEdge(n2, n4, 4);
 	GEdge<char, int> *e5 = graph.insertEdge(n3, n2, 5);
 
+	std::cout << graph.existsPath(n3, n4) << std::endl;
+
 	std::cout << graph.nodes() << " " << graph.edges() << std::endl;
 
 	graph.removeEdge(n1, n2);
