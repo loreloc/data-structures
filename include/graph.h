@@ -372,7 +372,9 @@ bool Graph<T, W>::existsPath(GNode<T, W> *a, GNode<T, W> *b) const
 
 	while(!queue.empty())
 	{
-		GNode<T, W> *s = queue.pop();
+		GNode<T, W> *s = queue.front();
+		queue.pop();
+
 		LinkedList<GNode<T, W> *> adj = getAdjacents(s);
 
 		LNode<GNode<T, W> *> *tmp = adj.begin();

@@ -24,7 +24,8 @@ public:
 	bool empty() const;
 	size_t size() const;
 	void push(T v);
-	T pop();
+	T front() const;
+	void pop();
 
 	template<class U>
 	friend std::ostream &operator<<(std::ostream &os, const Queue<U> &q);
@@ -126,20 +127,26 @@ void Queue<T>::push(T v)
 }
 
 template<typename T>
-T Queue<T>::pop()
+T Queue<T>::front() const
+{
+	if(empty())
+		throw "queue is empty";
+
+	return m_head->value;
+}
+
+template<typename T>
+void Queue<T>::pop()
 {
 	if(empty())
 		throw "queue is empty";
 
 	QNode<T> *node = m_head;
-	T value = node->value;
 
 	m_head = m_head->next;
 	delete node;
 
 	m_size--;
-
-	return value;
 }
 
 template<typename T>

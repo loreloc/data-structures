@@ -11,7 +11,9 @@ int main(int argc, char *argv[])
 
 	std::cout << queue << std::endl;
 
-	std::cout << queue.pop() << std::endl;
+	std::cout << queue.front() << std::endl;
+
+	queue.pop();
 
 	std::cout << queue << std::endl;
 
