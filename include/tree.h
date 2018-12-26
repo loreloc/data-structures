@@ -140,6 +140,9 @@ void Tree<T>::remove(TNode<T> *n)
 		n->parent->childs.remove(n->parent->childs.find(n));
 
 	_remove(n);
+
+	if(n->parent == nullptr)
+		m_root = nullptr;
 }
 
 template<typename T>
