@@ -28,6 +28,10 @@ int main(int argc, char *argv[])
 
 	std::cout << tree.width() << std::endl;
 
+	tree.remove(p);
+
+	std::cout << tree << std::endl;
+
 	return 0;
 }
 

@@ -32,6 +32,7 @@ public:
 	TNode<T>* parent(TNode<T> *n) const;
 	const LinkedList<TNode<T> *>& childs(TNode<T> *n) const;
 	TNode<T>* addChild(TNode<T> *n, T v);
+	void remove(TNode<T> *n);
 
 	bool empty() const;
 	size_t size() const;
@@ -130,6 +131,15 @@ TNode<T>* Tree<T>::addChild(TNode<T> *n, T v)
 	m_size++;
 
 	return tmp;
+}
+
+template<typename T>
+void Tree<T>::remove(TNode<T> *n)
+{
+	if(n->parent != nullptr)
+		n->parent->childs.remove(n->parent->childs.find(n));
+
+	_remove(n);
 }
 
 template<typename T>
