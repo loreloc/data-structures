@@ -241,6 +241,9 @@ GEdge<T, W>* Graph<T, W>::insertEdge(GNode<T, W> *a, GNode<T, W> *b, W w)
 template<typename T, typename W>
 void Graph<T, W>::removeNode(GNode<T, W> *n)
 {
+	if(!m_matrix[n->id].valid)
+		throw "the node doesn't exist";
+
 	for(size_t i = 0; i < m_size; i++)
 	{
 		if(m_matrix[n->id].edges[i].valid)
