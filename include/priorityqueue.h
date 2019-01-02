@@ -171,7 +171,7 @@ void PriorityQueue<T>::_fixDown()
 	{
 		size_t j = 2 * i;
 
-		if(m_heap[j] > m_heap[j + 1])
+		if(j < m_size && m_heap[j] > m_heap[j + 1])
 			j++;
 
 		if(m_heap[j] < m_heap[i])
