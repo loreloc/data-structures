@@ -52,8 +52,8 @@ public:
 	~Graph();
 
 	Graph &operator=(const Graph &g);
-	GNode<T>* getFirst(GEdge<T, W> *e) const;
-	GNode<T>* getSecond(GEdge<T, W> *e) const;
+	GNode<T, W>* getFirst(GEdge<T, W> *e) const;
+	GNode<T, W>* getSecond(GEdge<T, W> *e) const;
 	W getWeight(GEdge<T, W> *e) const;
 	T getValue(GNode<T, W> *n) const;
 	void setWeight(GEdge<T, W> *e, W w);
@@ -152,13 +152,13 @@ Graph<T, W> &Graph<T, W>::operator=(const Graph &g)
 }
 
 template<typename T, typename W>
-GNode<T>* Graph<T, W>::getFirst(GEdge<T, W> *e) const
+GNode<T, W>* Graph<T, W>::getFirst(GEdge<T, W> *e) const
 {
 	return e->first;
 }
 
 template<typename T, typename W>
-GNode<T>* Graph<T, W>::getSecond(GEdge<T, W> *e) const
+GNode<T, W>* Graph<T, W>::getSecond(GEdge<T, W> *e) const
 {
 	return e->second;
 }
