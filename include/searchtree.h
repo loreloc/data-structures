@@ -33,6 +33,7 @@ public:
 	STNode<T>* prev(STNode<T> *n) const;
 	STNode<T>* insert(T v);
 	void remove(STNode<T> *n);
+	bool contains(T v) const;
 
 	static void print(std::ostream &os, STNode<T> *n);
 
@@ -237,6 +238,12 @@ void SearchTree<T>::remove(STNode<T> *n)
 		m->left = n->left;
 		m->left->parent = m;
 	}
+}
+
+template<typename T>
+bool SearchTree<T>::contains(T v) const
+{
+	return search(v) != nullptr;
 }
 
 template<typename T>
