@@ -12,16 +12,7 @@ template<class T, class W>
 class Graph;
 
 template<class T, class W>
-class GEdge
-{
-	friend class Graph<T, W>;
-
-	GEdge() : valid(false) { }
-
-private:
-	bool valid;
-	W weight;
-};
+class GEdge;
 
 template<class T, class W>
 class GNode
@@ -33,8 +24,23 @@ class GNode
 private:
 	bool valid;
 	T value;
-	GEdge<T, W> *edges;
 	size_t id;
+	GEdge<T, W> *edges;
+	
+};
+
+template<class T, class W>
+class GEdge
+{
+	friend class Graph<T, W>;
+
+	GEdge() : valid(false) { }
+
+private:
+	bool valid;
+	GNode<T, W> *first;
+	GNode<T, W> *second;
+	W weight;
 };
 
 template<class T, class W>
@@ -46,7 +52,8 @@ public:
 	~Graph();
 
 	Graph &operator=(const Graph &g);
-
+	GNode<T>* getFirst(GEdge<T, W> *e) const;
+	GNode<T>* getSecond(GEdge<T, W> *e) const;
 	W getWeight(GEdge<T, W> *e) const;
 	T getValue(GNode<T, W> *n) const;
 	void setWeight(GEdge<T, W> *e, W w);
@@ -72,8 +79,6 @@ public:
 	size_t outDegree(GNode<T, W> *n) const;
 	double meanOutDegree() const;
 	bool existsPath(GNode<T, W> *a, GNode<T, W> *b) const;
-
-	Graph kruskal() const;
 
 private:
 	size_t m_size;
@@ -144,6 +149,18 @@ Graph<T, W> &Graph<T, W>::operator=(const Graph &g)
 	}
 
 	return *this;
+}
+
+template<typename T, typename W>
+GNode<T>* Graph<T, W>::getFirst(GEdge<T, W> *e) const
+{
+	return e->first;
+}
+
+template<typename T, typename W>
+GNode<T>* Graph<T, W>::getSecond(GEdge<T, W> *e) const
+{
+	return e->second;
 }
 
 template<typename T, typename W>
@@ -223,6 +240,8 @@ GEdge<T, W>* Graph<T, W>::insertEdge(GNode<T, W> *a, GNode<T, W> *b, W w)
 		throw "the edge already exists";
 
 	m_matrix[a->id].edges[b->id].valid = true;
+	m_matrix[a->id].edges[b->id].first = a;
+	m_matrix[a->id].edges[b->id].second = b;
 	m_matrix[a->id].edges[b->id].weight = w;
 
 	m_edges++;
