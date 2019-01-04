@@ -14,7 +14,7 @@ TARGETS = lists         \
           stack         \
           queue         \
           deque         \
-          dictionary    \
+          hashtable     \
           binarytree    \
           tree          \
           priorityqueue \
