@@ -24,6 +24,7 @@ public:
 	virtual void popBack() = 0;
 	virtual void popFront() = 0;
 
+	virtual void sort();
 	virtual void invert();
 };
 
@@ -44,6 +45,37 @@ std::ostream &operator<<(std::ostream &os, const List<T, P> &l)
 	os << "]";
 
 	return os;
+}
+
+template<class T, class P>
+void List<T, P>::sort()
+{
+	P p = begin();
+
+	while(!end(p))
+	{
+		P q = p;
+
+		P pmin = p;
+		T min = read(p);
+
+		while(!end(q))
+		{
+			if(read(q) < min)
+			{
+				min = read(q);
+				pmin = q;
+			}
+
+			q = next(q);
+		}
+
+		T tmp = read(p);
+		write(p, min);
+		write(pmin, tmp);
+
+		p = next(p);
+	}
 }
 
 template<class T, class P>
