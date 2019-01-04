@@ -239,14 +239,14 @@ GEdge<T, W>* Graph<T, W>::insertEdge(GNode<T, W> *a, GNode<T, W> *b, W w)
 	if(edgeBetween(a, b) != nullptr)
 		throw "the edge already exists";
 
-	m_matrix[a->id].edges[b->id].valid = true;
-	m_matrix[a->id].edges[b->id].first = a;
-	m_matrix[a->id].edges[b->id].second = b;
-	m_matrix[a->id].edges[b->id].weight = w;
+	a->edges[b->id].valid = true;
+	a->edges[b->id].first = a;
+	a->edges[b->id].second = b;
+	a->edges[b->id].weight = w;
 
 	m_edges++;
 
-	return &m_matrix[a->id].edges[b->id];
+	return &a->edges[b->id];
 } 
 
 template<typename T, typename W>
@@ -257,9 +257,9 @@ void Graph<T, W>::removeNode(GNode<T, W> *n)
 
 	for(size_t i = 0; i < m_size; i++)
 	{
-		if(m_matrix[n->id].edges[i].valid)
+		if(n->edges[i].valid)
 		{
-			m_matrix[n->id].edges[i].valid = false;
+			n->edges[i].valid = false;
 			m_edges--;
 		}
 
@@ -281,7 +281,7 @@ void Graph<T, W>::removeEdge(GNode<T, W> *a, GNode<T, W> *b)
 	if(edgeBetween(a, b) == nullptr)
 		throw "the edge doesn't exist";
 
-	m_matrix[a->id].edges[b->id].valid = false;
+	a->edges[b->id].valid = false;
 
 	m_edges--;
 }
@@ -289,8 +289,8 @@ void Graph<T, W>::removeEdge(GNode<T, W> *a, GNode<T, W> *b)
 template<typename T, typename W>
 GEdge<T, W>* Graph<T, W>::edgeBetween(GNode<T, W> *a, GNode<T, W> *b) const
 {
-	if(m_matrix[a->id].edges[b->id].valid)
-		return &m_matrix[a->id].edges[b->id];
+	if(a->edges[b->id].valid)
+		return &a->edges[b->id];
 
 	return nullptr;
 }
@@ -301,7 +301,7 @@ LinkedList<GNode<T, W> *> Graph<T, W>::getAdjacents(GNode<T, W> *n) const
 	LinkedList<GNode<T, W> *> adj;
 
 	for(size_t i = 0; i < m_size; i++)
-		if(m_matrix[n->id].edges[i].valid)
+		if(n->edges[i].valid)
 			adj.pushBack(&m_matrix[i]);
 
 	return adj;
