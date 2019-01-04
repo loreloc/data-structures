@@ -4,9 +4,9 @@
 #include <iostream>
 #include <cstring>
 
-#include "linkedlist.h"
-#include "hashtable.h"
 #include "queue.h"
+#include "linkedlist.h"
+#include "searchtree.h"
 
 template<class T, class W>
 class Graph;
@@ -35,16 +35,6 @@ private:
 	T value;
 	GEdge<T, W> *edges;
 	size_t id;
-};
-
-template<class T, class W>
-class Hash<GNode<T, W> *>
-{
-public:
-	size_t operator()(GNode<T, W> *n) const
-	{
-		return (size_t)n;
-	}
 };
 
 template<class T, class W>
@@ -82,6 +72,8 @@ public:
 	size_t outDegree(GNode<T, W> *n) const;
 	double meanOutDegree() const;
 	bool existsPath(GNode<T, W> *a, GNode<T, W> *b) const;
+
+	Graph kruskal() const;
 
 private:
 	size_t m_size;
@@ -368,9 +360,9 @@ bool Graph<T, W>::existsPath(GNode<T, W> *a, GNode<T, W> *b) const
 		return true;
 
 	Queue<GNode<T, W> *> queue;
-	HashTable<GNode<T, W> *, bool> visited(m_size);
+	SearchTree<GNode<T, W> *> visited;
 
-	visited.insert(a, true);
+	visited.insert(a);
 	queue.push(a);
 
 	while(!queue.empty())
@@ -391,7 +383,7 @@ bool Graph<T, W>::existsPath(GNode<T, W> *a, GNode<T, W> *b) const
 
 			if(!visited.contains(n))
 			{
-				visited.insert(n, true);
+				visited.insert(n);
 				queue.push(n);
 			}
 
