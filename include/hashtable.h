@@ -355,7 +355,7 @@ std::ostream &operator<<(std::ostream &os, const HashTable<K, T> &ht)
 
 		while(tmp != nullptr)
 		{
-			os << tmp->value << " ";
+			os << "(" << tmp->key << " " << tmp->value << ") ";
 
 			tmp = tmp->next;
 		}
