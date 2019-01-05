@@ -133,6 +133,9 @@ private:
 template<typename T>
 HashTable<GNode<T, unsigned> *, unsigned> Dijkstra(const Graph<T, unsigned> &graph, GNode<T, unsigned> *source);
 
+template<typename T>
+LinkedList<GNode<T, unsigned> *> FindPath(const Graph<T, unsigned> &graph, GNode<T, unsigned> *source, GNode<T, unsigned> *target);
+
 template<typename T, typename W>
 Graph<T, W>::Graph(size_t s)
 {
@@ -473,10 +476,10 @@ HashTable<GNode<T, unsigned> *, unsigned> Dijkstra(const Graph<T, unsigned> &gra
 
 	while(!nodes.end(tmp))
 	{
-		GNode<T, unsigned> *node = nodes.read(tmp);
+		GNode<T, unsigned> *v = nodes.read(tmp);
 
-		if(node != source)
-			dist.insert(node, UINT_MAX);
+		if(v != source)
+			dist.insert(v, UINT_MAX);
 
 		tmp = nodes.next(tmp);
 	}
@@ -513,5 +516,79 @@ HashTable<GNode<T, unsigned> *, unsigned> Dijkstra(const Graph<T, unsigned> &gra
 	}
 
 	return dist;
+}
+
+template<typename T>
+LinkedList<GNode<T, unsigned> *> FindPath(const Graph<T, unsigned> &graph, GNode<T, unsigned> *source, GNode<T, unsigned> *target)
+{
+	PriorityQueue<DGNode<T> > queue;
+	HashTable<GNode<T, unsigned> *, unsigned> dist(graph.nodes());
+	HashTable<GNode<T, unsigned> *, GNode<T, unsigned> *> prev(graph.nodes());
+
+	dist.insert(source, 0);
+	queue.push(DGNode<T>(source, 0));
+
+	LinkedList<GNode<T, unsigned> *> nodes = graph.getNodes();
+	LNode<GNode<T, unsigned> *> *tmp = nodes.begin();
+
+	while(!nodes.end(tmp))
+	{
+		GNode<T, unsigned> *v = nodes.read(tmp);
+
+		if(v != source)
+			dist.insert(v, UINT_MAX);
+
+		prev.insert(v, nullptr);
+
+		tmp = nodes.next(tmp);
+	}
+
+	while(!queue.empty())
+	{
+		DGNode<T> u = queue.min();
+		queue.pop();
+
+		LinkedList<GNode<T, unsigned> *> adj = graph.getAdjacents(u.node);
+
+		tmp = adj.begin();
+
+		while(!adj.end(tmp))
+		{
+			GNode<T, unsigned> *v = adj.read(tmp);
+
+			GEdge<T, unsigned> *edge = graph.edgeBetween(u.node, v);
+
+			unsigned alt = dist.get(u.node) + graph.getWeight(edge);
+
+			if(alt < dist.get(v))
+			{
+				dist.insert(v, alt);
+				prev.insert(v, u.node);
+
+				DGNode<T> dnode(v, alt);
+
+				if(!queue.contains(dnode))
+					queue.push(dnode);
+			}
+
+			tmp = adj.next(tmp);
+		}
+	}
+
+	LinkedList<GNode<T, unsigned> *> path;
+
+	GNode<T, unsigned> *u = target;
+
+	if(prev.contains(u) || u == source)
+	{
+		while(u != nullptr)
+		{
+			path.pushFront(u);
+
+			u = prev.get(u);
+		}
+	}
+
+	return path;
 }
 

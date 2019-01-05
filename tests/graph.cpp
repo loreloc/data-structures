@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 	GEdge<char, unsigned> *e4 = graph.insertEdge(n2, n4, 4);
 	GEdge<char, unsigned> *e5 = graph.insertEdge(n3, n2, 5);
 
-	std::cout << graph.existsPath(n3, n4) << std::endl;
+	std::cout << graph.existsPath(n3, n4) << std::endl << std::endl;
 
 	HashTable<GNode<char, unsigned> *, unsigned> dist = Dijkstra(graph, n1);
 
@@ -33,6 +33,18 @@ int main(int argc, char *argv[])
 	}
 
 	std::cout << std::endl;
+
+	LinkedList<GNode<char, unsigned> *> path = FindPath(graph, n1, n2);
+	tmp = path.begin();
+
+	while(!path.end(tmp))
+	{
+		std::cout << graph.getValue(path.read(tmp)) << " ";
+
+		tmp = path.next(tmp);
+	}
+
+	std::cout << std::endl << std::endl;
 
 	std::cout << graph.nodes() << " " << graph.edges() << std::endl;
 
