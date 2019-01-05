@@ -150,7 +150,8 @@ void PriorityQueue<T>::_changeSize(size_t s)
 {
 	T *data = new T[s];
 
-	memcpy(data, m_heap, sizeof(T) * m_size);
+	for(size_t i = 0; i < m_size; i++)
+		data[i] = m_heap[i];
 
 	T *tmp = m_heap;
 	m_heap = data;
@@ -182,7 +183,7 @@ void PriorityQueue<T>::_fixDown()
 	{
 		size_t j = 2 * i;
 
-		if(j < m_size && m_heap[j] > m_heap[j + 1])
+		if(j < m_size && m_heap[j + 1] < m_heap[j])
 			j++;
 
 		if(m_heap[j] < m_heap[i])
