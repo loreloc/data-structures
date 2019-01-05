@@ -14,6 +14,8 @@ int main(int argc, char *argv[])
 	queue.push(1);
 	queue.push(6);
 
+	std::cout << queue.contains(4) << std::endl;
+
 	while(!queue.empty())
 	{
 		std::cout << queue.min() << std::endl;

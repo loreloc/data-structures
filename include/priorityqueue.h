@@ -21,6 +21,7 @@ public:
 	void pop();
 	T min() const;
 	T& min();
+	bool contains(T v) const;
 
 private:
 	size_t m_size;
@@ -132,6 +133,16 @@ T& PriorityQueue<T>::min()
 		throw "heap is empty";
 
 	return m_heap[0];
+}
+
+template<typename T>
+bool PriorityQueue<T>::contains(T v) const
+{
+	for(size_t i = 0; i < m_size; i++)
+		if(m_heap[i] == v)
+			return true;
+
+	return false;
 }
 
 template<typename T>
