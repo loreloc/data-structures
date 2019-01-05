@@ -3,7 +3,7 @@
 CC = g++
 
 # compile flags
-CFLAGS = -Iinclude -Wall -std=c++11 -O2
+CFLAGS = -Iinclude -Wall -std=c++11 -O0 -g
 
 # directories
 SDIR = tests
