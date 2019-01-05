@@ -462,7 +462,7 @@ bool Graph<T, W>::existsPath(GNode<T, W> *a, GNode<T, W> *b) const
 template<typename T>
 HashTable<GNode<T, unsigned> *, unsigned> Dijkstra(const Graph<T, unsigned> &graph, GNode<T, unsigned> *source)
 {
-	PriorityQueue<DGNode<T>> queue;
+	PriorityQueue<DGNode<T> > queue;
 	HashTable<GNode<T, unsigned> *, unsigned> dist(graph.nodes());
 
 	dist.insert(source, 0);
