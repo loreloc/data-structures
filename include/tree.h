@@ -286,21 +286,29 @@ size_t Tree<T>::_depth(TNode<T> *n, size_t d) const
 template<typename T>
 size_t Tree<T>::_width(TNode<T> *n, size_t w) const
 {
+	Queue<TNode<T>*> q;
 	size_t width = w;
+	q.push(n);
 
-	const LinkedList<TNode<T> *> &ch = childs(n);
-
-	LNode<TNode<T> *> *tmp = ch.begin();
-	while(!ch.end(tmp))
+	while (!q.empty())
 	{
-		size_t k = _width(ch.read(tmp), ch.size());
+		int i=q.size();
+		if (i>width) width=i;
 
-		if(k > width)
-			width = k;
+		int j=0;
+		while (j<i){
+			const LinkedList<TNode<T> *> &ch = childs(q.front());
 
-		tmp = ch.next(tmp);
+			LNode<TNode<T> *> *tmp = ch.begin();
+			while(!ch.end(tmp))
+			{
+				q.push(ch.read(tmp));
+				tmp = ch.next(tmp);
+			}
+			q.pop();
+			j++;
+		}
 	}
-
 	return width;
 }
 
@@ -320,4 +328,3 @@ void Tree<T>::_print(std::ostream &os, TNode<T> *n)
 
 	std::cout << "] ";
 }
-
