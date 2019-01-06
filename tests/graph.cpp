@@ -15,6 +15,7 @@ int main(int argc, char *argv[])
 	GEdge<char, unsigned> *e3 = graph.insertEdge(n1, n4, 3);
 	GEdge<char, unsigned> *e4 = graph.insertEdge(n2, n4, 4);
 	GEdge<char, unsigned> *e5 = graph.insertEdge(n3, n2, 5);
+	GEdge<char, unsigned> *e6 = graph.insertEdge(n4, n3, 1);
 
 	std::cout << graph.existsPath(n3, n4) << std::endl << std::endl;
 
@@ -42,6 +43,28 @@ int main(int argc, char *argv[])
 		std::cout << graph.getValue(path.read(tmp)) << " ";
 
 		tmp = path.next(tmp);
+	}
+
+	std::cout << std::endl << std::endl;
+
+	HashTable<GNode<char, unsigned> *, GNode<char, unsigned> *> tree = Prim(graph);
+
+	keys = tree.keys();
+	tmp = keys.begin();
+
+	while(!keys.end(tmp))
+	{
+		GNode<char, unsigned> *k = keys.read(tmp);
+		GNode<char, unsigned> *v = tree.get(k);
+
+		std::cout << graph.getValue(k) << " - ";
+
+		if(v == nullptr)
+			std::cout << "NULL" << std::endl;
+		else
+			std::cout << graph.getValue(v) << std::endl;
+
+		tmp = keys.next(tmp);
 	}
 
 	std::cout << std::endl << std::endl;
