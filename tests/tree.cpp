@@ -25,6 +25,8 @@ int main(int argc, char *argv[])
 	tree.addChild(p1, 2);
 	tree.addChild(p1, 3);
 
+	tree.BST();
+
 	std::cout << tree << std::endl;
 
 	std::cout << tree.depth() << std::endl;

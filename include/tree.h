@@ -44,6 +44,8 @@ public:
 	size_t depth() const;
 	size_t width() const;
 
+	void BST() const;
+
 	static void print(std::ostream &os, TNode<T> *n);
 
 	template<class U>
@@ -200,6 +202,36 @@ size_t Tree<T>::width() const
 		return 0;
 
 	return _width(root(), 1);
+}
+
+template<typename T>
+void Tree<T>::BST() const
+{
+	if(empty())
+		return;
+
+	Queue<TNode<T> *> queue;
+
+	queue.push(root());
+
+	while(!queue.empty())
+	{
+		TNode<T> *node = queue.front();
+		queue.pop();
+
+		// do something with node
+
+		const LinkedList<TNode<T> *> &ch = childs(node);
+
+		LNode<TNode<T> *> *tmp = ch.begin();
+
+		while(!ch.end(tmp))
+		{
+			queue.push(ch.read(tmp));
+
+			tmp = ch.next(tmp);
+		}
+	}
 }
 
 template<typename T>
