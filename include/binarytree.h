@@ -32,6 +32,10 @@ public:
 	void removeLeft(BTNode<T> *n);
 	void removeRight(BTNode<T> *n);
 
+	void walkPreOrder() const;
+	void walkInOrder() const;
+	void walkPostOrder() const;
+
 	static void print(std::ostream &os, BTNode<T> *n);
 
 	template<class U>
@@ -43,6 +47,10 @@ private:
 
 	BTNode<T> *_copy(BTNode<T> *n, BTNode<T> *p);
 	void _remove(BTNode<T> *n);
+
+	void _walkPreOrder(BTNode<T> *n) const;
+	void _walkInOrder(BTNode<T> *n) const;
+	void _walkPostOrder(BTNode<T> *n) const;
 
 	static void _print(std::ostream &os, BTNode<T> *n);
 };
@@ -175,6 +183,24 @@ void BinaryTree<T>::removeRight(BTNode<T> *n)
 }
 
 template<typename T>
+void BinaryTree<T>::walkPreOrder() const
+{
+	_walkPreOrder(root());
+}
+
+template<typename T>
+void BinaryTree<T>::walkInOrder() const
+{
+	_walkInOrder(root());
+}
+
+template<typename T>
+void BinaryTree<T>::walkPostOrder() const
+{
+	_walkPostOrder(root());
+}
+
+template<typename T>
 void BinaryTree<T>::print(std::ostream &os, BTNode<T> *n)
 {
 	if(n == nullptr)
@@ -217,6 +243,43 @@ void BinaryTree<T>::_remove(BTNode<T> *n)
 		delete n;
 
 		m_size--;
+	}
+}
+
+template<typename T>
+void BinaryTree<T>::_walkPreOrder(BTNode<T> *n) const
+{
+	if(n != nullptr)
+	{
+		// do something with n
+
+		_walkPreOrder(n->left);
+		_walkPreOrder(n->right);
+	}
+}
+
+template<typename T>
+void BinaryTree<T>::_walkInOrder(BTNode<T> *n) const
+{
+	if(n != nullptr)
+	{
+		_walkInOrder(n->left);
+
+		// do something with n
+
+		_walkInOrder(n->right);
+	}
+}
+
+template<typename T>
+void BinaryTree<T>::_walkPostOrder(BTNode<T> *n) const
+{
+	if(n != nullptr)
+	{
+		_walkPostOrder(n->left);
+		_walkPostOrder(n->right);
+
+		// do something with n
 	}
 }
 

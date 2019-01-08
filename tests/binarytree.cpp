@@ -13,6 +13,10 @@ int main(int argc, char *argv[])
 	BTNode<int> *p4 = tree.insertRight(p2, 4);
 	BTNode<int> *p5 = tree.insertRight(p4, 5);
 
+	tree.walkPreOrder();
+	tree.walkInOrder();
+	tree.walkPostOrder();
+
 	std::cout << tree << std::endl;
 
 	tree.removeRight(p2);
