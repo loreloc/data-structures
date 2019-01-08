@@ -5,6 +5,7 @@
 #include <cstring>
 #include <climits>
 
+#include "stack.h"
 #include "queue.h"
 #include "hashtable.h"
 #include "linkedlist.h"
@@ -122,6 +123,9 @@ public:
 	size_t outDegree(GNode<T, W> *n) const;
 	double meanOutDegree() const;
 	bool existsPath(GNode<T, W> *a, GNode<T, W> *b) const;
+
+	void BST(GNode<T, W> *n) const;
+	void DST(GNode<T, W> *n) const;
 
 private:
 	size_t m_size;
@@ -463,6 +467,76 @@ bool Graph<T, W>::existsPath(GNode<T, W> *a, GNode<T, W> *b) const
 	}
 
 	return false;
+}
+
+template<typename T, typename W>
+void Graph<T, W>::BST(GNode<T, W> *n) const
+{
+	Queue<GNode<T, W> *> queue;
+	SearchTree<GNode<T, W> *> visited;
+
+	queue.push(n);
+	visited.insert(n);
+
+	while(!queue.empty())
+	{
+		GNode<T, W> *node = queue.front();
+		queue.pop();
+
+		// do something with node
+
+		LinkedList<GNode<T, W> *> adj = getAdjacents(node);
+
+		LNode<GNode<T, W> *> *tmp = adj.begin();
+
+		while(!adj.end(tmp))
+		{
+			GNode<T, W> *u = adj.read(tmp);
+
+			if(!visited.contains(u))
+			{
+				queue.push(u);
+				visited.insert(u);
+			}
+
+			tmp = adj.next(tmp);
+		}
+	}
+}
+
+template<typename T, typename W>
+void Graph<T, W>::DST(GNode<T, W> *n) const
+{
+	Stack<GNode<T, W> *> stack;
+	SearchTree<GNode<T, W> *> visited;
+
+	stack.push(n);
+	visited.insert(n);
+
+	while(!stack.empty())
+	{
+		GNode<T, W> *node = stack.top();
+		stack.pop();
+
+		// do something with node
+
+		LinkedList<GNode<T, W> *> adj = getAdjacents(node);
+
+		LNode<GNode<T, W> *> *tmp = adj.begin();
+
+		while(!adj.end(tmp))
+		{
+			GNode<T, W> *u = adj.read(tmp);
+
+			if(!visited.contains(u))
+			{
+				stack.push(u);
+				visited.insert(u);
+			}
+
+			tmp = adj.next(tmp);
+		}
+	}
 }
 
 template<typename T>

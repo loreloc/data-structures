@@ -17,6 +17,9 @@ int main(int argc, char *argv[])
 	GEdge<char, unsigned> *e5 = graph.insertEdge(n3, n2, 5);
 	GEdge<char, unsigned> *e6 = graph.insertEdge(n4, n3, 1);
 
+	graph.BST(n1);
+	graph.DST(n1);
+
 	std::cout << graph.existsPath(n3, n4) << std::endl << std::endl;
 
 	HashTable<GNode<char, unsigned> *, unsigned> dist = Dijkstra(graph, n1);
