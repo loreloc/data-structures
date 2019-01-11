@@ -3,9 +3,15 @@
 
 #include <iostream>
 
+template<class  T>
+class BinaryTree;
+
 template<class T>
-struct BTNode
+class BTNode
 {
+	friend class BinaryTree<T>;
+
+private:
 	T value;
 	BTNode<T> *left;
 	BTNode<T> *right;
@@ -21,6 +27,12 @@ public:
 	~BinaryTree();
 
 	BinaryTree &operator=(const BinaryTree &t);
+
+	T getValue(BTNode<T> *n) const;
+	void setValue(BTNode<T> *n, T v);
+	BTNode<T>* getLeft(BTNode<T> *n) const;
+	BTNode<T>* getRight(BTNode<T> *n) const;
+	BTNode<T>* getParent(BTNode<T> *n) const;
 
 	bool empty() const;
 	size_t size() const;
@@ -88,6 +100,36 @@ BinaryTree<T>& BinaryTree<T>::operator=(const BinaryTree<T> &t)
 	m_root = _copy(t.root(), nullptr);
 
 	return *this;
+}
+
+template<typename T>
+T BinaryTree<T>::getValue(BTNode<T> *n) const
+{
+	return n->value;
+}
+
+template<typename T>
+void BinaryTree<T>::setValue(BTNode<T> *n, T v)
+{
+	n->value = v;
+}
+
+template<typename T>
+BTNode<T>* BinaryTree<T>::getLeft(BTNode<T> *n) const
+{
+	return n->left;
+}
+
+template<typename T>
+BTNode<T>* BinaryTree<T>::getRight(BTNode<T> *n) const
+{
+	return n->right;
+}
+
+template<typename T>
+BTNode<T>* BinaryTree<T>::getParent(BTNode<T> *n) const
+{
+	return n->parent;
 }
 
 template<typename T>
