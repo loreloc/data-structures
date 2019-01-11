@@ -238,6 +238,8 @@ void SearchTree<T>::remove(STNode<T> *n)
 		m->left = n->left;
 		m->left->parent = m;
 	}
+
+	delete n;
 }
 
 template<typename T>
